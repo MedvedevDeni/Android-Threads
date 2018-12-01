@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Android Threads</string>
+    <string name="start_game_button">Play</string>
+    <string name="exit_game_button">Exit</string>
 </resources>

@@ -1,9 +1,6 @@
 package com.example.denis.androidthreads;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -22,11 +19,12 @@ import android.widget.TextView;
 import java.io.IOException;
 
 
+
 public class GameActivity extends AppCompatActivity implements SensorEventListener {
 
     private ConstraintLayout gameField;
-    private ImageView ball;
-    private MoveElements accelerationElements;
+    private ImageView imageBall;
+    private Ball ball;
     private TextView backTimer;
     private GameTimer timer;
     private MediaPlayer backgroundMusic;
@@ -51,10 +49,12 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_game);
 
         gameField = findViewById(R.id.gameField);
-        ball = findViewById(R.id.ball);
+        imageBall = findViewById(R.id.ball);
         backTimer = findViewById(R.id.backTimer);
         countOfHit = findViewById(R.id.countOfHit);
         backgroundMusic = MediaPlayer.create(this, R.raw.credits);
+
+        //Инициализация и назначение слушателя для датчика
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -67,15 +67,15 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             e.printStackTrace();
         }
 
-        accelerationElements = new MoveElements(gameField, ball, countOfHit, hitSound, soundID);
-        timer = new GameTimer(backTimer, accelerationElements, currentGameTime);
+        ball = new Ball(gameField, imageBall, countOfHit, hitSound, soundID);
+        timer = new GameTimer(backTimer, ball, currentGameTime);
         backgroundMusic.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 mp.start();
             }
         });
-        accelerationElements.start();
+        ball.start();
         timer.start();
     }
 
@@ -83,11 +83,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentPosition", backgroundMusic.getCurrentPosition());
-        outState.putFloat("xPos", accelerationElements.getxPos());
-        outState.putFloat("yPos", accelerationElements.getyPos());
-        outState.putFloat("accelerationX", accelerationElements.getAccelerationX());
-        outState.putFloat("accelerationY", accelerationElements.getAccelerationY());
-        outState.putInt("currentScore", accelerationElements.getScoreCounter());
+        outState.putFloat("xPos", ball.getxPos());
+        outState.putFloat("yPos", ball.getyPos());
+        outState.putFloat("accelerationX", ball.getAccelerationX());
+        outState.putFloat("accelerationY", ball.getAccelerationY());
+        outState.putInt("currentScore", ball.getScoreCounter());
         outState.putInt("currentGameTime", timer.getCurrentTime());
     }
 
@@ -147,18 +147,18 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
     private void resetUI() {
         backgroundMusic.seekTo(currentPosition);
-        accelerationElements.setScoreCounter(currentScore);
-        accelerationElements.setxPos(xPos);
-        accelerationElements.setyPos(yPos);
-        accelerationElements.setAccelerationX(accelerationX);
-        accelerationElements.setAccelerationY(accelerationY);
+        ball.setScoreCounter(currentScore);
+        ball.setxPos(xPos);
+        ball.setyPos(yPos);
+        ball.setAccelerationX(accelerationX);
+        ball.setAccelerationY(accelerationY);
         timer.setCurrentTime(currentGameTime);
     }
 
 
     public void accelerationChange(float coordinateX, float coordinateY) {
-        accelerationElements.setAccelerationX(coordinateX);
-        accelerationElements.setAccelerationY(coordinateY);
+        ball.setAccelerationX(coordinateX);
+        ball.setAccelerationY(coordinateY);
     }
 
     private SoundPool getSoundPoolLink() {

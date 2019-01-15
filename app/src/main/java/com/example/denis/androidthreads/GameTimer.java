@@ -4,11 +4,11 @@ import android.widget.TextView;
 
 public class GameTimer extends Thread {
 
-    private MoveElements game;
+    private Ball game;
     private TextView backTimer;
     private int currentTime;
 
-    GameTimer(TextView backTimer, MoveElements game, int currentTime) {
+    GameTimer(TextView backTimer, Ball game, int currentTime) {
         this.game = game;
         this.backTimer = backTimer;
         this.currentTime = currentTime;
@@ -16,11 +16,6 @@ public class GameTimer extends Thread {
 
     @Override
     public void run() {
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         for (; currentTime > 0; currentTime--) {
             setTextOnView(backTimer, "" + currentTime);
             try {

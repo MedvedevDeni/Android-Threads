@@ -47,11 +47,19 @@ public class MenuActivity extends AppCompatActivity {
         backgroundMusic.release();
     }
 
+    /*
+     * Метод запускает игру
+     */
+
     public void startButton(View view) {
         Intent intent = new Intent(MenuActivity.this, GameActivity.class);
         startActivity(intent);
         System.exit(0);
     }
+
+    /*
+     * Метод завершает игру
+     */
 
     public void exitButton(View view) {
         System.exit(0);

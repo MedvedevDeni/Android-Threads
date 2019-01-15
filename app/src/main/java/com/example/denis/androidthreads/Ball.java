@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MoveElements extends Thread {
+public class Ball extends Thread {
 
     private ConstraintLayout gameField;
     private ImageView movableElement;
@@ -20,7 +20,7 @@ public class MoveElements extends Thread {
     private float xPos;
     private float yPos;
 
-    MoveElements(ConstraintLayout gameField, ImageView movableElement, TextView countOfHit, SoundPool hitSound, int soundID) {
+    Ball (ConstraintLayout gameField, ImageView movableElement, TextView countOfHit, SoundPool hitSound, int soundID) {
         this.movableElement = movableElement;
         this.gameField = gameField;
         this.countOfHit = countOfHit;
@@ -30,11 +30,6 @@ public class MoveElements extends Thread {
 
     @Override
     public void run() {
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         while (!endGame) {
             xPos = movableElement.getX();
             yPos = movableElement.getY();
